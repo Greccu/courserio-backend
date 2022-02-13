@@ -45,6 +45,7 @@ namespace Courserio.Api
                             //    new DefaultAzureCredential());
                             //config.AddAzureKeyVault(secretClient, new KeyVaultSecretManager()); // add an extra configuration source
                             //                                                                    // The framework calls config.Build() AGAIN to build the final IConfigurationRoot
+                            webBuilder.UseKestrel(configure => { configure.Listen(System.Net.IPAddress.Any, 5000); });
                         }
                     });
                     webBuilder.UseStartup<Startup>()

@@ -12,7 +12,6 @@ namespace Courserio.Infrastructure.Seeders
     public class InitialSeeder
     {
         private readonly AppDbContext _context;
-        private readonly string path = "C:\\Users\\Grecu\\Desktop\\SofbinatorCourses\\";
         public InitialSeeder(AppDbContext context)
         {
             _context = context;

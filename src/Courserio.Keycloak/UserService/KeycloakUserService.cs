@@ -24,7 +24,7 @@ namespace Courserio.Keycloak.UserService
             _options = options.Value;
         }
 
-        public async Task<KeycloakResponse> Login(LoginDto loginDto)
+        public async Task<KeycloakResponse> LoginAsync(LoginDto loginDto)
         {
             var url = _options.Authority + "/protocol/openid-connect/token";
             var body = new
@@ -39,20 +39,22 @@ namespace Courserio.Keycloak.UserService
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(url),
-                Headers = {
-                    { HttpRequestHeader.Accept.ToString(), "application/json" },
-                    { HttpRequestHeader.ContentType.ToString(), "application/x-www-form-urlencoded" },
-                    { "X-Version", "1" }
+                Headers =
+                {
+                    {HttpRequestHeader.Accept.ToString(), "application/json"},
+                    {HttpRequestHeader.ContentType.ToString(), "application/x-www-form-urlencoded"},
+                    {"X-Version", "1"}
                 },
                 //Content = new StringContent("data=" + HttpUtility.UrlEncode(JsonSerializer.Serialize(body)), Encoding.UTF8, "application/x-www-form-urlencoded")
-                Content = new FormUrlEncodedContent(new[]{
+                Content = new FormUrlEncodedContent(new[]
+                {
                     new KeyValuePair<string, string>("grant_type", "password"),
                     new KeyValuePair<string, string>("username", loginDto.Username),
                     new KeyValuePair<string, string>("password", loginDto.Password),
                     new KeyValuePair<string, string>("client_id", _options.ClientId),
                     new KeyValuePair<string, string>("client_secret", _options.ClientSecret),
                 })
-        };
+            };
 
             var response = await _httpClient.SendAsync(httpRequestMessage);
 
@@ -63,7 +65,7 @@ namespace Courserio.Keycloak.UserService
             };
         }
 
-        public async Task<KeycloakResponse> Register(RegisterDto registerDto)
+        public async Task<KeycloakResponse> RegisterAsync(RegisterDto registerDto)
         {
             var url = _options.Host + "/auth/admin/realms/Courserio/users";
             var body = new
@@ -79,32 +81,107 @@ namespace Courserio.Keycloak.UserService
                         value = registerDto.Password
                     }
                 }
-               
-            }; 
-            var token = await Auth();
+
+            };
+            var token = await AuthAsync();
             var httpRequestMessage = new HttpRequestMessage
             {
                 Method = HttpMethod.Post,
                 RequestUri = new Uri(url),
-                Headers = {
-                    { HttpRequestHeader.Accept.ToString(), "application/json" },
-                    { HttpRequestHeader.ContentType.ToString(), "application/json"},
-                    { "X-Version", "1" },
-                    { HttpRequestHeader.Authorization.ToString(), $"Bearer {token}" },
+                Headers =
+                {
+                    {HttpRequestHeader.Accept.ToString(), "application/json"},
+                    {HttpRequestHeader.ContentType.ToString(), "application/json"},
+                    {"X-Version", "1"},
+                    {HttpRequestHeader.Authorization.ToString(), $"Bearer {token}"},
                 },
                 Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json")
             };
 
             var response = await _httpClient.SendAsync(httpRequestMessage);
 
+            if (response.StatusCode != HttpStatusCode.Created)
+            {
+                return new KeycloakResponse
+                {
+                    HttpStatusCode = response.StatusCode,
+                    Content = await response.Content.ReadAsStringAsync()
+                };
+            }
             return new KeycloakResponse
             {
                 HttpStatusCode = response.StatusCode,
-                Content = await response.Content.ReadAsStringAsync()
+                Content = await GetUserIdAsync(registerDto.Username)
             };
         }
 
-        private async Task<string> Auth()
+        public async Task AddRoleToUserAsync(string userId, RoleDto role)
+        {
+            var url = _options.Host + $"/auth/admin/realms/Courserio/users/{userId}/role-mappings/clients/{_options.Id}"; ;
+            var token = await AuthAsync();
+            var content = $"[{JsonSerializer.Serialize(role)}]";
+            var httpRequestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Post,
+                RequestUri = new Uri(url),
+                Headers =
+                {
+                    {HttpRequestHeader.Accept.ToString(), "application/json"},
+                    {"X-Version", "1"},
+                    {HttpRequestHeader.Authorization.ToString(), $"Bearer {token}"},
+                },
+                Content = new StringContent(content, Encoding.UTF8, "application/json")
+
+            };
+
+            var response = await _httpClient.SendAsync(httpRequestMessage);
+        }
+
+        public async Task RemoveRoleFromUserAsync(string userId, RoleDto role)
+        {
+            var url = _options.Host + $"/auth/admin/realms/Courserio/users/{userId}/role-mappings/clients/{_options.Id}"; ;
+            var token = await AuthAsync();
+            var content = $"[{JsonSerializer.Serialize(role)}]";
+            var httpRequestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(url),
+                Headers =
+                {
+                    {HttpRequestHeader.Accept.ToString(), "application/json"},
+                    {"X-Version", "1"},
+                    {HttpRequestHeader.Authorization.ToString(), $"Bearer {token}"},
+                },
+                Content = new StringContent(content, Encoding.UTF8, "application/json")
+
+            };
+
+            var response = await _httpClient.SendAsync(httpRequestMessage);
+        }
+
+        private async Task<string> GetUserIdAsync(string username)
+        {
+            var url = _options.Host + $"/auth/admin/realms/Courserio/users?username={username}"; ;
+            var token = await AuthAsync();
+            var httpRequestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(url),
+                Headers =
+                {
+                    {HttpRequestHeader.Accept.ToString(), "application/json"},
+                    {"X-Version", "1"},
+                    {HttpRequestHeader.Authorization.ToString(), $"Bearer {token}"},
+                },
+            };
+
+            var response = await _httpClient.SendAsync(httpRequestMessage);
+            var content = await response.Content.ReadAsStringAsync();
+            return JArray.Parse(content)[0]!["id"]!.ToString();
+        }
+    
+
+    private async Task<string> AuthAsync()
         {
             var url = _options.Authority + "/protocol/openid-connect/token";
             var httpRequestMessage = new HttpRequestMessage
@@ -128,7 +205,7 @@ namespace Courserio.Keycloak.UserService
             };
             var response = await _httpClient.SendAsync(httpRequestMessage);
             var content = await response.Content.ReadAsStringAsync();
-            return JObject.Parse(content)?["access_token"]?.ToString();
+            return JObject.Parse(content)!["access_token"]!.ToString();
         }
     }
 }

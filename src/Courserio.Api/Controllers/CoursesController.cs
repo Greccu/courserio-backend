@@ -1,6 +1,7 @@
 ﻿using Courserio.Core.DTOs.Course;
 using Courserio.Core.Filters;
 using Courserio.Core.Interfaces;
+using Courserio.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

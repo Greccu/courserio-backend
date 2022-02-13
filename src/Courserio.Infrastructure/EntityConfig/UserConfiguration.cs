@@ -36,7 +36,7 @@ namespace Courserio.Infrastructure.EntityConfig
             builder.Property(c => c.ProfilePicture)
                .HasMaxLength(500)
                .IsRequired();
-
+            
         }
     }
 }

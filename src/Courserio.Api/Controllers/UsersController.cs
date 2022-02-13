@@ -1,7 +1,10 @@
 ﻿using Courserio.Core.DTOs;
+using Courserio.Core.DTOs.Role;
 using Courserio.Core.DTOs.User;
 using Courserio.Core.Filters;
 using Courserio.Core.Interfaces;
+using Courserio.Core.Interfaces.Services;
+using Courserio.Keycloak.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -23,15 +26,16 @@ namespace Courserio.Api.Controllers
             _userService = userService;
         }
 
+
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        public async Task<IActionResult> GetAsync(int id)
         {
             var res = await _userService.GetByIdAsync(id);
             return Ok(res);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(UserFilter userFilter)
+        public async Task<IActionResult> GetAllAsync(UserFilter userFilter)
         {
             var res = await _userService.ListAsync(userFilter);
             return Ok(res);
@@ -39,16 +43,26 @@ namespace Courserio.Api.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterDto registerDto)
+        public async Task<IActionResult> RegisterAsync(UserRegisterDto registerDto)
         {
             await _userService.RegisterAsync(registerDto);
             return Ok();
         }
 
-        //[NonAction]
-        //private string CurrentUserId()
-        //{
-        //    return User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        //}
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync(LoginDto loginDto)
+        {
+            var res = await _userService.LoginAsync(loginDto);
+            return Ok(res);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("role")]
+        public async Task<IActionResult> ChangeRoleAsync(RoleChangeDto roleChangeDto)
+        {
+            await _userService.ChangeRoleAsync(roleChangeDto);
+            return Ok();
+        }
+
     }
 }

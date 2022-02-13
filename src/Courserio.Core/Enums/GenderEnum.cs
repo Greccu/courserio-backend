@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 namespace Courserio.Core.Enums
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum StatusEnum
+    public enum GenderEnum
     {
-        Pending,
-        Accepted,
-        Declined
+        Male,
+        Female,
+        NonBinary,
+        Unspecified
     }
 }

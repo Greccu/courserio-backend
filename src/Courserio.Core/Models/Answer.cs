@@ -12,15 +12,16 @@ namespace Courserio.Core.Models
         //
         [Key]
         public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+
         [Required, MinLength(2), MaxLength(100)]
         public string Title { get; set; }
         [Required, MinLength(2)]
         public string Content { get; set; }
-        public DateTime CretedAt { get; set; }
         public bool Anonymous { get; set; }
         
         //
-        public string UserId { get; set; }
+        public int UserId { get; set; }
         public int QuestionId { get; set; }
 
         // Navigation Properties

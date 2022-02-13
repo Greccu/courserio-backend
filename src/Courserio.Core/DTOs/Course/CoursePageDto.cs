@@ -7,7 +7,7 @@ using Courserio.Core.DTOs.User;
 
 namespace Courserio.Core.DTOs.Course
 {
-    public class CourseListDto
+    public class CoursePageDto
     {
         public int Id { get; set; }
         public string CoverImage { get; set; }

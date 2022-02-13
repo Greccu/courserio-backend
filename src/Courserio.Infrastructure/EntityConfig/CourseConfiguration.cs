@@ -13,7 +13,6 @@ namespace Courserio.Infrastructure.EntityConfig
     {
         public void Configure(EntityTypeBuilder<Course> builder)
         {
-
         }
     }
 }

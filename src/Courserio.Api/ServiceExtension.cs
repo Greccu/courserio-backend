@@ -2,6 +2,7 @@
 using Courserio.Core.AutoMapper;
 using Courserio.Core.Interfaces;
 using Courserio.Core.Interfaces.Repositories;
+using Courserio.Core.Interfaces.Services;
 using Courserio.Core.Services;
 using Courserio.Infrastructure.Context;
 using Courserio.Infrastructure.Repositories;

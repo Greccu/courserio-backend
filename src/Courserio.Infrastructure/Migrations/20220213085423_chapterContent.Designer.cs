@@ -3,6 +3,7 @@ using System;
 using Courserio.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Courserio.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220213085423_chapterContent")]
+    partial class chapterContent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +169,6 @@ namespace Courserio.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("KeycloakId")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -251,9 +250,6 @@ namespace Courserio.Infrastructure.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<string>("KeycloakId")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("LastName")
                         .HasColumnType("longtext");
 
@@ -263,17 +259,12 @@ namespace Courserio.Infrastructure.Migrations
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("longtext");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Username")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
                     b.HasIndex("FeaturedCourseId");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -308,6 +299,21 @@ namespace Courserio.Infrastructure.Migrations
                     b.ToTable("CourseUser");
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<int>("RolesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RolesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("RoleUser");
+                });
+
             modelBuilder.Entity("Courserio.Core.Models.Answer", b =>
                 {
                     b.HasOne("Courserio.Core.Models.Question", "Question")
@@ -317,7 +323,7 @@ namespace Courserio.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Courserio.Core.Models.User", "User")
-                        .WithMany("Answers")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -358,7 +364,7 @@ namespace Courserio.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Courserio.Core.Models.User", "User")
-                        .WithMany("Questions")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -393,15 +399,7 @@ namespace Courserio.Infrastructure.Migrations
                         .WithMany("FeaturingUsers")
                         .HasForeignKey("FeaturedCourseId");
 
-                    b.HasOne("Courserio.Core.Models.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("FeaturedCourse");
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("CourseTag", b =>
@@ -434,6 +432,21 @@ namespace Courserio.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("Courserio.Core.Models.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Courserio.Core.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Courserio.Core.Models.Chapter", b =>
                 {
                     b.Navigation("Questions");
@@ -454,17 +467,11 @@ namespace Courserio.Infrastructure.Migrations
             modelBuilder.Entity("Courserio.Core.Models.Role", b =>
                 {
                     b.Navigation("RoleApplications");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Courserio.Core.Models.User", b =>
                 {
-                    b.Navigation("Answers");
-
                     b.Navigation("CreatedCourses");
-
-                    b.Navigation("Questions");
 
                     b.Navigation("RoleApplications");
                 });

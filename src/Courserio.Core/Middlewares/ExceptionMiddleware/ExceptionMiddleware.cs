@@ -70,7 +70,7 @@ namespace Courserio.Core.Middlewares.ExceptionMiddleware
             await context.Response.WriteAsync(JsonSerializer.Serialize(new
             {
                 Message = exception.Message,
-                Exception = exception
+                //Exception = exception
             }));
         }
     }

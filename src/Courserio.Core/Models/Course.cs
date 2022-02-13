@@ -11,13 +11,14 @@ namespace Courserio.Core.Models
     public class Course
     {
         public int Id { get; set; }
+        public DateTime CreatedAt { get; set; }
+
         [Url]
         public string CoverImage { get; set; }
         [Url]
         public string MiniatureImage { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public DateTime CreatedAt { get; set; }
         public int CreatorId { get; set; }
 
 
@@ -25,7 +26,9 @@ namespace Courserio.Core.Models
         [InverseProperty("CreatedCourses")]
         public virtual User Creator { get; set; }
         public virtual ICollection<User> Users { get; set; }
-        //public virtual ICollection<Tag> Tags { get; set; }
-        //public virtual ICollection<Chapter> Chapters { get; set; }
+        [InverseProperty("FeaturedCourse")]
+        public virtual ICollection<User> FeaturingUsers { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Chapter> Chapters { get; set; }
     }
 }

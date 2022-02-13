@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace Courserio.Core.Enums
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public enum StatusEnum
+    public enum ChapterTypeEnum
     {
-        Pending,
-        Accepted,
-        Declined
+        Video,
+        Text,
+        Quiz
     }
 }
