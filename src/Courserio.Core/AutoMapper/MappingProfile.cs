@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Courserio.Core.DTOs;
 using Courserio.Core.DTOs.Auth;
+using Courserio.Core.DTOs.Chapter;
 using Courserio.Core.DTOs.Course;
 using Courserio.Core.Models;
 using Courserio.Core.DTOs.User;
@@ -17,6 +18,7 @@ namespace Courserio.Core.AutoMapper
             AllowNullCollections = true;
             AllowNullDestinationValues = true;
 
+            CreateMap<DateTime, DateOnly>();
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<User, UserProfileDto>().ReverseMap();
             CreateMap<User, UserRegisterDto>().ReverseMap();
@@ -26,8 +28,16 @@ namespace Courserio.Core.AutoMapper
             CreateMap<UserRegisterDto, RegisterDto>().ReverseMap();
 
             CreateMap<Course, CourseListDto>().ReverseMap();
-            CreateMap<Course, CoursePageDto>().ReverseMap();
+            CreateMap<Course, CoursePageDto>().AfterMap((src, dest) =>
+            {
+                dest.Chapters = dest.Chapters.OrderBy(x => x.Title);
+            }).ReverseMap();
             CreateMap<Course, CourseCreateDto>().ReverseMap();
+            CreateMap<Course, CourseFeaturedDto>().ReverseMap();
+
+            CreateMap<Chapter, ChapterListDto>().ReverseMap();
+            CreateMap<Chapter, ChapterPageDto>().ReverseMap();
+            CreateMap<Chapter, ChapterCreateDto>().ReverseMap();
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

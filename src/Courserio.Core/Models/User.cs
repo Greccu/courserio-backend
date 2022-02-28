@@ -15,7 +15,7 @@ namespace Courserio.Core.Models
         public string AboutMe { get; set; }
         [Url]
         public string ProfilePicture { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateOnly? DateOfBirth { get; set; }
         public GenderEnum Gender { get; set; }
         public string PhoneNumber { get; set; }
         //

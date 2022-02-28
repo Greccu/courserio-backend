@@ -35,16 +35,23 @@ namespace Courserio.Api.Controllers
         /// </remarks>
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] CourseFilter courseFilter)
+        public async Task<IActionResult> GetAllAsync([FromQuery] CourseFilter courseFilter)
         {
             var ret = await _courseService.ListAsync(courseFilter);
             return Ok(ret);
         }
         
         [HttpGet("home")]
-        public async Task<IActionResult> GetHomeCourses()
+        public async Task<IActionResult> GetHomeCoursesAsync()
         {
             var ret = await _courseService.GetHomeAsync();
+            return Ok(ret);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var ret = await _courseService.GetByIdAsync(id);
             return Ok(ret);
         }
 
@@ -61,6 +68,8 @@ namespace Courserio.Api.Controllers
             await _courseService.CreateAsync(course);
             return Ok();
         }
+
+
 
         ///// <summary>
         ///// See a course.

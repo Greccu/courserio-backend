@@ -44,7 +44,7 @@ namespace Courserio.Core.Services
         {
             
             var users = _userRepository
-                .ListAllAsQueryable()
+                .AsQueryable()
                 .ApplyPagination(userFilter)
                 ;
 
@@ -53,7 +53,7 @@ namespace Courserio.Core.Services
         }
         public async Task<UserProfileDto> GetByIdAsync(int id)
         {
-            var user = await _userRepository.ListAllAsQueryable()
+            var user = await _userRepository.AsQueryable()
                 .Where(x => x.Id == id)
                 .Include(x => x.FeaturedCourse)
                 .Include(x => x.CreatedCourses)
@@ -95,7 +95,7 @@ namespace Courserio.Core.Services
             string accessToken = data.access_token;
             var jsonToken = _jwtHandler.ReadJwtToken(accessToken);
             var username = jsonToken.Claims.First(claim => claim.Type == "preferred_username").Value;
-            var user = await _userRepository.ListAllAsQueryable().Where(x => x.Username == username).FirstOrDefaultAsync();
+            var user = await _userRepository.AsQueryable().Where(x => x.Username == username).FirstOrDefaultAsync();
             var ret = _mapper.Map<LoginResponseDto>(user);
             ret.AccessToken = accessToken;
             return ret;

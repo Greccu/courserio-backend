@@ -8,5 +8,6 @@ namespace Courserio.Core.Interfaces.Services
         Task<List<CourseListDto>> GetHomeAsync();
         Task<List<CourseListDto>> ListAsync(CourseFilter courseFilter);
         Task CreateAsync(CourseCreateDto courseDto);
+        Task<CoursePageDto> GetByIdAsync(int id);
     }
 }

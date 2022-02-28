@@ -1,14 +1,8 @@
 ﻿using Courserio.Core.Constants;
 using Courserio.Core.Models;
-using Courserio.Core.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using Courserio.Core.DTOs.Course;
 using Courserio.Core.Filters;
-using Courserio.Core.Interfaces;
 using Courserio.Core.Interfaces.Repositories;
 using Courserio.Core.Interfaces.Services;
 using Courserio.Pagination;
@@ -38,7 +32,7 @@ namespace Courserio.Core.Services
                 PageSize = 5
             };
             var courses = _courseRepository
-                    .ListAllAsQueryable()
+                    .AsQueryable()
                     .Include(x => x.Creator)
                     .ApplyPagination(courseFilter)
                 ;
@@ -51,7 +45,7 @@ namespace Courserio.Core.Services
         {
 
             var courses = _courseRepository
-                    .ListAllAsQueryable()
+                    .AsQueryable()
                     .Include(x => x.Creator)
                     .ApplyPagination(courseFilter)
                 ;
@@ -69,6 +63,18 @@ namespace Courserio.Core.Services
             await _courseRepository.AddAsync(course);
         }
 
+        public async Task<CoursePageDto> GetByIdAsync(int id)
+        {
+            var course = await _courseRepository
+                .AsQueryable()
+                .Where(x => x.Id == id)
+                .Include(x => x.Creator)
+                .Include(x => x.Chapters)
+                .FirstOrDefaultAsync()
+                ;
+            return _mapper.Map<CoursePageDto>(course);
+        }
+            
 
         //    public List<CourseInfo> GetCourses(string tags, string sort, string search, int page)
         //    {

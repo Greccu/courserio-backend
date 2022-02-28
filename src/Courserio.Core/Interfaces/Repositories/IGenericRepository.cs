@@ -4,7 +4,7 @@
     {
         Task<T> GetByIdAsync(int id);
         Task<IReadOnlyList<T>> ListAllAsync();
-        IQueryable<T> ListAllAsQueryable();
+        IQueryable<T> AsQueryable();
         Task<T> AddAsync(T entity);
         Task AddRangeAsync(List<T> entities);
         Task UpdateAsync(T entity);

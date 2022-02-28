@@ -26,7 +26,7 @@ namespace Courserio.Infrastructure.Repositories
             return await _dbContext.Set<T>().ToListAsync();
         }
 
-        public IQueryable<T> ListAllAsQueryable()
+        public IQueryable<T> AsQueryable()
         {
             return _dbContext.Set<T>();
         }

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Courserio.Core.DTOs.Chapter;
+using Courserio.Core.DTOs.Course;
 
 namespace Courserio.Core.Interfaces.Services
 {
     public interface IChapterService
     {
+        Task CreateAsync(ChapterCreateDto chapterDto);
+        Task<ChapterPageDto> GetByIdAsync(int id);
     }
 }

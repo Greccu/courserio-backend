@@ -65,13 +65,21 @@ namespace Courserio.Api
 
             app.UseRouting();
 
+
             app.UseAuthentication(); 
             app.UseAuthorization();
             
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                if (env.IsDevelopment())
+                {
+                    endpoints.MapControllers().WithMetadata(new AllowAnonymousAttribute());
+                }
+                else
+                {
+                    endpoints.MapControllers();
+                }
             });
 
             seeder.Seed();

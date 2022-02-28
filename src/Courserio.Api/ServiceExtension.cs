@@ -41,7 +41,7 @@ namespace Courserio.Api
             //services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ICourseService, CourseService>();
             //services.AddScoped<ISectionService, SectionService>();
-            //services.AddScoped<IChapterService, ChapterService>();
+            services.AddScoped<IChapterService, ChapterService>();
             //services.AddScoped<IQuestionService, QuestionService>();
             //services.AddScoped<IAnswerService, AnswerService>();
             //services.AddScoped<ITagService, TagService>();
