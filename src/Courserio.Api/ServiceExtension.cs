@@ -38,14 +38,13 @@ namespace Courserio.Api
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUserService, UserService>();
-            //services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ICourseService, CourseService>();
-            //services.AddScoped<ISectionService, SectionService>();
             services.AddScoped<IChapterService, ChapterService>();
-            //services.AddScoped<IQuestionService, QuestionService>();
-            //services.AddScoped<IAnswerService, AnswerService>();
+            services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IAnswerService, AnswerService>();
             //services.AddScoped<ITagService, TagService>();
-            //services.AddScoped<IRoleApplicationService, RoleApplicationService>();
+            services.AddScoped<IRoleApplicationService, RoleApplicationService>();
         }
 
         public static void AddAuthorizationHandler(this IServiceCollection services)
@@ -57,7 +56,7 @@ namespace Courserio.Api
             services.AddDbContext<AppDbContext>(options =>
                 options.UseMySql(configuration.GetConnectionString("LocalDB"),
                 new MySqlServerVersion(new Version(10, 6, 4))
-                , options => options.EnableRetryOnFailure()
+                , options2 => options2.EnableRetryOnFailure()
                 )
              );
         }

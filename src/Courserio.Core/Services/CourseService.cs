@@ -1,16 +1,16 @@
-﻿using Courserio.Core.Constants;
-using Courserio.Core.Models;
-using AutoMapper;
+﻿using AutoMapper;
+using Courserio.Core.Constants;
 using Courserio.Core.DTOs.Course;
 using Courserio.Core.Filters;
 using Courserio.Core.Interfaces.Repositories;
 using Courserio.Core.Interfaces.Services;
+using Courserio.Core.Models;
 using Courserio.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace Courserio.Core.Services
 {
-    
+
 
     public class CourseService : ICourseService
     {
@@ -74,7 +74,7 @@ namespace Courserio.Core.Services
                 ;
             return _mapper.Map<CoursePageDto>(course);
         }
-            
+
 
         //    public List<CourseInfo> GetCourses(string tags, string sort, string search, int page)
         //    {

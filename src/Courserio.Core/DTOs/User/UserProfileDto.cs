@@ -12,10 +12,10 @@ namespace Courserio.Core.DTOs.User
         public string LastName { get; set; }
         public string AboutMe { get; set; }
         public string ProfilePicture { get; set; }
-        public DateOnly? DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
         public GenderEnum Gender { get; set; }
         public string PhoneNumber { get; set; }
-        
+
         public virtual CourseFeaturedDto FeaturedCourse { get; set; }
         public virtual ICollection<CourseListDto> CreatedCourses { get; set; }
         public virtual ICollection<CourseListDto> Courses { get; set; }

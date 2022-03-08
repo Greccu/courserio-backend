@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Courserio.Core.Enums;
+﻿using Courserio.Core.Enums;
 
 namespace Courserio.Core.DTOs.Chapter
 {
@@ -11,7 +6,7 @@ namespace Courserio.Core.DTOs.Chapter
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
-        
+
         public string Title { get; set; }
         public string Description { get; set; }
         //

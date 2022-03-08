@@ -11,7 +11,7 @@ namespace Courserio.Core.DTOs.User
         public string FirstName { get; set; }
         [Required, MinLength(2), MaxLength(50)]
         public string LastName { get; set; }
-        [Url,AllowNull]
+        [Url, AllowNull]
         public string ProfilePicture { get; set; }
         [Required, EmailAddress]
         public string Email { get; set; }

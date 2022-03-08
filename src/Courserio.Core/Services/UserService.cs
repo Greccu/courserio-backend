@@ -1,27 +1,24 @@
-﻿using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
-using Courserio.Core.Models;
-using Courserio.Core.DTOs;
-using Courserio.Core.Interfaces;
-using Courserio.Core.Interfaces.Repositories;
-using Courserio.Keycloak.UserService;
-using AutoMapper;
+﻿using AutoMapper;
 using Courserio.Core.Constants;
 using Courserio.Core.DTOs.Auth;
 using Courserio.Core.DTOs.Role;
 using Courserio.Core.DTOs.User;
-using Courserio.Keycloak.Models;
-using Microsoft.EntityFrameworkCore;
 using Courserio.Core.Filters;
+using Courserio.Core.Interfaces.Repositories;
 using Courserio.Core.Interfaces.Services;
 using Courserio.Core.Middlewares.ExceptionMiddleware.CustomExceptions;
+using Courserio.Core.Models;
+using Courserio.Keycloak.Models;
+using Courserio.Keycloak.UserService;
 using Courserio.Pagination;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 
 namespace Courserio.Core.Services
 {
-    
+
 
     public class UserService : IUserService
     {
@@ -39,10 +36,10 @@ namespace Courserio.Core.Services
             _roleRepository = roleRepository;
             _jwtHandler = new JwtSecurityTokenHandler();
         }
-        
+
         public async Task<List<UserDto>> ListAsync(UserFilter userFilter)
         {
-            
+
             var users = _userRepository
                 .AsQueryable()
                 .ApplyPagination(userFilter)
@@ -81,7 +78,7 @@ namespace Courserio.Core.Services
         public async Task<LoginResponseDto> LoginAsync(LoginDto loginDto)
         {
             var res = await _keycloakUserService.LoginAsync(loginDto);
-            switch (res.HttpStatusCode) 
+            switch (res.HttpStatusCode)
             {
                 case HttpStatusCode.OK:
                     break;

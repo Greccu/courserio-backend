@@ -1,10 +1,5 @@
 ﻿using Courserio.Core.Constants;
 using Courserio.Core.Filters;
-using Courserio.Pagination;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Courserio.Pagination
 {

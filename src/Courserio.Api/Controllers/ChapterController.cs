@@ -15,12 +15,12 @@ namespace Courserio.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(Roles = "User")]
-    public class ChaptersController : ControllerBase
+    public class ChapterController : ControllerBase
     {
 
         private readonly IChapterService _chapterService;
 
-        public ChaptersController(IChapterService chapterService)
+        public ChapterController(IChapterService chapterService)
         {
             _chapterService = chapterService;
         }

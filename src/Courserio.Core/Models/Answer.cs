@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Courserio.Core.Models
 {
@@ -13,13 +8,11 @@ namespace Courserio.Core.Models
         [Key]
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        [Required, MinLength(2), MaxLength(100)]
-        public string Title { get; set; }
+        
         [Required, MinLength(2)]
         public string Content { get; set; }
         public bool Anonymous { get; set; }
-        
+
         //
         public int UserId { get; set; }
         public int QuestionId { get; set; }

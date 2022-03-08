@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Courserio.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Courserio.Core.Enums;
 
 namespace Courserio.Core.Models
 {

@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using Courserio.Core.Middlewares.ExceptionMiddleware.CustomExceptions;
+﻿using Courserio.Core.Middlewares.ExceptionMiddleware.CustomExceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace Courserio.Core.Middlewares.ExceptionMiddleware
 {
@@ -60,7 +60,7 @@ namespace Courserio.Core.Middlewares.ExceptionMiddleware
                     throw;
                 }
                 await HandleExceptionAsync(httpContext, ex, 501);
-                
+
             }
         }
         private static async Task HandleExceptionAsync(HttpContext context, Exception exception, int statusCode)

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Courserio.Core.DTOs.Chapter;
-using Courserio.Core.DTOs.Course;
 using Courserio.Core.Interfaces.Repositories;
 using Courserio.Core.Interfaces.Services;
 using Courserio.Core.Models;
@@ -18,7 +12,7 @@ namespace Courserio.Core.Services
         private readonly IGenericRepository<Chapter> _chapterRepository;
         private readonly IMapper _mapper;
 
-        public ChapterService( IMapper mapper, IGenericRepository<Chapter> chapterRepository)
+        public ChapterService(IMapper mapper, IGenericRepository<Chapter> chapterRepository)
         {
             _mapper = mapper;
             _chapterRepository = chapterRepository;

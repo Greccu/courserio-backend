@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Courserio.Core.Constants
+﻿namespace Courserio.Core.Constants
 {
     public class PaginationConstants
     {
