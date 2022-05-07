@@ -59,7 +59,7 @@ namespace Courserio.Core.Services
                 query = query.Where(x => x.Title.Contains(courseFilter.Title));
             }
 
-            if (string.IsNullOrEmpty(courseFilter.OrderBy))
+            if (!string.IsNullOrEmpty(courseFilter.OrderBy))
             {
                 switch (courseFilter.OrderBy.ToLower())
                 {
