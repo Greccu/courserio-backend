@@ -4,9 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Courserio.Core.Models
 {
-    public class User
+    public class User : BaseEntity
     {
-        public int Id { get; set; }
         public string KeycloakId { get; set; }
         public string Email { get; set; }
         public string Username { get; set; }
@@ -28,10 +27,9 @@ namespace Courserio.Core.Models
         public virtual Course FeaturedCourse { get; set; }
         [InverseProperty("Creator")]
         public virtual ICollection<Course> CreatedCourses { get; set; }
-        [InverseProperty("Users")]
-        public virtual ICollection<Course> Courses { get; set; }
         public virtual ICollection<Question> Questions { get; set; }
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<RoleApplication> RoleApplications { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
     }
 }

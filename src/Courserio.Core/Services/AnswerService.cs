@@ -18,11 +18,12 @@ namespace Courserio.Core.Services
             _answerRepository = answerRepository;
         }
 
-        public async Task CreateAsync(AnswerCreateDto answerDto)
+        public async Task<AnswerDto> CreateAsync(AnswerCreateDto answerDto)
         {
             var answer = _mapper.Map<Answer>(answerDto);
             answer.CreatedAt = DateTime.Now;
             await _answerRepository.AddAsync(answer);
+            return _mapper.Map<AnswerDto>(answer);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Courserio.Infrastructure.Context
         public DbSet<Chapter> Chapters { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Question> Questions { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<RoleApplication> RoleApplications { get; set; }
         public DbSet<Tag> Tags { get; set; }

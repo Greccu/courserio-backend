@@ -7,5 +7,6 @@ namespace Courserio.Core.Filters
         public bool IsPagingEnabled { get; set; } = false;
         public int PageSize { get; set; } = PaginationConstants.DefaultPageSize;
         public int Page { get; set; } = 1;
+        public string OrderBy { get; set; }
     }
 }

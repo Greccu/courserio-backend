@@ -5,7 +5,9 @@ using Courserio.Core.DTOs.Auth;
 using Courserio.Core.DTOs.Chapter;
 using Courserio.Core.DTOs.Course;
 using Courserio.Core.DTOs.Question;
+using Courserio.Core.DTOs.Rating;
 using Courserio.Core.DTOs.User;
+using Courserio.Core.Helpers;
 using Courserio.Core.Models;
 using Courserio.Keycloak.Models;
 using Microsoft.AspNetCore.JsonPatch;
@@ -21,32 +23,57 @@ namespace Courserio.Core.AutoMapper
             AllowNullDestinationValues = true;
 
             CreateMap<DateTime, DateOnly>();
-            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
+                .ReverseMap();
             CreateMap<User, UserProfileDto>().ReverseMap();
+
             CreateMap<User, UserRegisterDto>().ReverseMap();
             CreateMap<User, RegisterDto>().ReverseMap();
             CreateMap<User, LoginResponseDto>().ReverseMap();
 
             CreateMap<UserRegisterDto, RegisterDto>().ReverseMap();
 
-            CreateMap<Course, CourseListDto>().ReverseMap();
-            CreateMap<Course, CoursePageDto>().AfterMap((src, dest) =>
+            CreateMap<Course, CourseListDto>()
+                .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
+                .ReverseMap();
+            CreateMap<Course, CoursePageDto>()
+                .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
+
+                .AfterMap((_, dest) =>
             {
                 dest.Chapters = dest.Chapters.OrderBy(x => x.Title);
             }).ReverseMap();
             CreateMap<Course, CourseCreateDto>().ReverseMap();
-            CreateMap<Course, CourseFeaturedDto>().ReverseMap();
-
+            CreateMap<Course, CourseFeaturedDto>()
+                .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
+                .ReverseMap();
+            CreateMap<Course, CourseDto>()
+                .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
+                .ReverseMap();
+            
             CreateMap<Chapter, ChapterListDto>().ReverseMap();
-            CreateMap<Chapter, ChapterPageDto>().ReverseMap();
-            CreateMap<Chapter, ChapterCreateDto>().ReverseMap();
+            CreateMap<Chapter, ChapterPageDto>()
+                .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
+                .ReverseMap();
+            CreateMap<Chapter, ChapterCreateDto>()
+                .ReverseMap();
 
 
-            CreateMap<Answer, AnswerDto>().AfterMap((src, dest) => { if (src.Anonymous) dest.User = UserConstants.AnonymousUser; });
+            CreateMap<Answer, AnswerDto>()
+                .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
+                .AfterMap((src, dest) => { if (src.Anonymous) dest.User = UserConstants.AnonymousUser; });
             CreateMap<Answer, AnswerCreateDto>().ReverseMap();
 
-            CreateMap<Question, QuestionDto>().AfterMap((src, dest) => { if (src.Anonymous) dest.User = UserConstants.AnonymousUser; });
+            CreateMap<Question, QuestionDto>()
+                .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
+                .AfterMap((src, dest) => { if (src.Anonymous) dest.User = UserConstants.AnonymousUser; });
             CreateMap<Question, QuestionCreateDto>().ReverseMap();
+
+            CreateMap<Rating, RatingCourseDto>()
+                .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
+                .ReverseMap();
+            CreateMap<Rating, RatingCreateDto>().ReverseMap();
 
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

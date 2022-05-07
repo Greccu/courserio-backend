@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using Courserio.Core.DTOs.Chapter;
 
 namespace Courserio.Core.DTOs.Course
 {
@@ -15,5 +16,6 @@ namespace Courserio.Core.DTOs.Course
         public string Description { get; set; }
         [Required]
         public int CreatorId { get; set; }
+        public List<ChapterCreateDto> Chapters { get; set; }
     }
 }

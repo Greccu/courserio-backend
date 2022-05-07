@@ -4,12 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Courserio.Core.Models
 {
-    public class Chapter
+    public class Chapter : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-
         public int OrderNumber { get; set; }
         [Required, MinLength(2), MaxLength(100)]
         public string Title { get; set; }

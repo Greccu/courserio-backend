@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
 
 namespace Courserio.Api.Controllers
 {
@@ -25,6 +25,21 @@ namespace Courserio.Api.Controllers
             _chapterService = chapterService;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var ret = await _chapterService.GetByIdAsync(id);
+            return Ok(ret);
+        }
+
+        //[Authorize(Roles = "Creator")]
+        [HttpPost]
+        public async Task<IActionResult> PostAsync([FromBody] ChapterCreateDto chapter)
+        {
+            await _chapterService.CreateAsync(chapter);
+
+            return Ok();
+        }
 
 
         //[Authorize]
@@ -41,23 +56,6 @@ namespace Courserio.Api.Controllers
         //    var ret = await _chapterService.GetHomeAsync();
         //    return Ok(ret);
         //}
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
-        {
-            var ret = await _chapterService.GetByIdAsync(id);
-            return Ok(ret);
-        }
-
-        //[Authorize(Roles = "Creator")]
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ChapterCreateDto chapter)
-        {
-            await _chapterService.CreateAsync(chapter);
-
-            return Ok();
-        }
-
 
     }
 }

@@ -25,8 +25,9 @@ namespace Courserio.Api
             // Keycloak authentication
             services.AddKeyCloakAuthentication(configuration.GetSection("KeyCloak"));
             // Keycloak Roles Authorization
-            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
-            services.AddTransient<IKeycloakUserService, KeycloakUserService>();
+            services.AddTransient<IAuthorizationHandler, RolesAuthorizationHandler>();
+            
+            services.AddScoped<IKeycloakUserService, KeycloakUserService>();
         }
 
         public static void AddSeeders(this IServiceCollection services)
@@ -37,20 +38,18 @@ namespace Courserio.Api
         public static void AddServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IAnswerService, AnswerService>();
+            
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IChapterService, ChapterService>();
             services.AddScoped<IQuestionService, QuestionService>();
-            services.AddScoped<IAnswerService, AnswerService>();
             //services.AddScoped<ITagService, TagService>();
+            services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<IRoleApplicationService, RoleApplicationService>();
         }
-
-        public static void AddAuthorizationHandler(this IServiceCollection services)
-        {
-            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
-        }
+        
         public static void AddDatabaseContext(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>

@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Courserio.Core.Models
 {
-    public class Course
+    public class Course : BaseEntity
     {
-        public int Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-
         [Url]
         public string CoverImage { get; set; }
         [Url]
@@ -15,15 +12,16 @@ namespace Courserio.Core.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public int CreatorId { get; set; }
-
+        public decimal AverageRating { get; set; }
+        public int RatingsCount { get; set; }
 
         // Navigation Properties
         [InverseProperty("CreatedCourses")]
         public virtual User Creator { get; set; }
-        public virtual ICollection<User> Users { get; set; }
         [InverseProperty("FeaturedCourse")]
         public virtual ICollection<User> FeaturingUsers { get; set; }
         public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Rating> Ratings { get; set; }
         public virtual ICollection<Chapter> Chapters { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Courserio.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Courserio.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220416090212_RolesAndEntitiesRework")]
+    partial class RolesAndEntitiesRework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +35,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("QuestionId")
@@ -64,7 +65,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Description")
@@ -104,7 +104,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("CreatorId")
@@ -146,7 +145,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("UserId")
@@ -171,7 +169,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("UserId")
@@ -186,7 +183,7 @@ namespace Courserio.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Rating");
                 });
 
             modelBuilder.Entity("Courserio.Core.Models.Role", b =>
@@ -196,7 +193,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("KeycloakId")
@@ -223,7 +219,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("RoleId")
@@ -251,7 +246,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Name")
@@ -274,7 +268,6 @@ namespace Courserio.Infrastructure.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateOnly?>("DateOfBirth")

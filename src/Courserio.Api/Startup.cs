@@ -2,7 +2,10 @@ using Courserio.Core.Middlewares.ExceptionMiddleware;
 using Courserio.Infrastructure.Seeders;
 using Courserio.KeyCloak;
 using Courserio.KeyCloak.AuthorizationHandler;
+using Courserio.Keycloak.UserService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Courserio.Api
 {
@@ -25,12 +28,14 @@ namespace Courserio.Api
 
             //// KEYCLOAK
             services.AddKeycloak(Configuration);
+           
 
-            services.AddControllers();
             services.AddSwagger();
             services.AddServices();
             services.AddTransient<InitialSeeder>();
             services.AddMapper();
+            services.AddControllers();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,28 +58,24 @@ namespace Courserio.Api
                     });
             }
 
-           
-
             app.UseCors("allowAll");
-
-           
 
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-
-            app.UseAuthentication(); 
-            app.UseAuthorization();
             
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 if (env.IsDevelopment())
                 {
-                    endpoints.MapControllers().WithMetadata(new AllowAnonymousAttribute());
+                    endpoints.MapControllers()
+                        //.WithMetadata(new AllowAnonymousAttribute())
+                        ;
                 }
                 else
                 {

@@ -3,12 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Courserio.Core.Models
 {
-    public class RoleApplication
+    public class RoleApplication : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-
         public int RoleId { get; set; }
         public int UserId { get; set; }
         [Required]

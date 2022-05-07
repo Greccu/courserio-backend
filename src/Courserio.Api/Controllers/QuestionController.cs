@@ -1,4 +1,5 @@
 ﻿using Courserio.Core.DTOs.Question;
+using Courserio.Core.Filters;
 using Courserio.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +24,17 @@ namespace Courserio.Api.Controllers
             return Ok(res);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ListAsync([FromQuery]QuestionFilter filter)
+        {
+            var res = await _questionService.ListAsync(filter);
+            return Ok(res);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody]QuestionCreateDto questionDto)
         {
-            await _questionService.CreateAsync(questionDto);
+            var res = await _questionService.CreateAsync(questionDto);
             return Ok();
         }
     }

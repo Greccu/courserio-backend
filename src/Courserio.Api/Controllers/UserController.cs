@@ -2,6 +2,7 @@
 using Courserio.Core.DTOs.Role;
 using Courserio.Core.DTOs.User;
 using Courserio.Core.Filters;
+using Courserio.Core.Helpers;
 using Courserio.Core.Interfaces;
 using Courserio.Core.Interfaces.Services;
 using Courserio.Keycloak.Models;
@@ -53,6 +54,15 @@ namespace Courserio.Api.Controllers
         public async Task<IActionResult> LoginAsync(LoginDto loginDto)
         {
             var res = await _userService.LoginAsync(loginDto);
+            return Ok(res);
+        }
+
+        [HttpPost("own")]
+        [Authorize]
+        public async Task<IActionResult> GetOwnInfoAsync()
+        {
+            var username = User.GetUsername();
+            var res = await _userService.GetInfoByUsernameAsync(username);
             return Ok(res);
         }
 

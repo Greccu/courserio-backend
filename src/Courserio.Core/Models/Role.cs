@@ -2,9 +2,8 @@
 
 namespace Courserio.Core.Models
 {
-    public class Role
+    public class Role : BaseEntity
     {
-        public int Id { get; set; }
         public string KeycloakId { get; set; }
         [Required, MinLength(2), MaxLength(20)]
         public string Name { get; set; }

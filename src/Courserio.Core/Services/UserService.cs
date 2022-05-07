@@ -42,6 +42,7 @@ namespace Courserio.Core.Services
 
             var users = _userRepository
                 .AsQueryable()
+                .Include(x => x.Role)
                 .ApplyPagination(userFilter)
                 ;
 
@@ -53,12 +54,22 @@ namespace Courserio.Core.Services
             var user = await _userRepository.AsQueryable()
                 .Where(x => x.Id == id)
                 .Include(x => x.FeaturedCourse)
-                .Include(x => x.CreatedCourses)
-                .Include(x => x.Courses)
+                .Include(x => x.CreatedCourses.OrderByDescending(y => y.CreatedAt).Take(10))
+                .Include(x => x.Ratings.OrderByDescending(y => y.CreatedAt).Take(10)).ThenInclude(x => x.Course)
                 .FirstOrDefaultAsync();
             var result = _mapper.Map<UserProfileDto>(user);
             return result;
         }
+
+        public async Task<UserDto> GetInfoByUsernameAsync(string username)
+        {
+            var user = await _userRepository
+                .AsQueryable()
+                .Include(x => x.Role)
+                .FirstOrDefaultAsync(x => x.Username == username);
+            var result = _mapper.Map<UserDto>(user);
+            return result;
+        }        
 
         public async Task RegisterAsync(UserRegisterDto userRegisterDto)
         {

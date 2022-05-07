@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Courserio.KeyCloak.AuthorizationHandler
 {
-    public class RolesAuthorizationHandler : AuthorizationHandler<RolesAuthorizationRequirement>, IAuthorizationHandler
+    public class RolesAuthorizationHandler : AuthorizationHandler<RolesAuthorizationRequirement>
     {
         private readonly string ClientId;
         
@@ -21,7 +21,7 @@ namespace Courserio.KeyCloak.AuthorizationHandler
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, RolesAuthorizationRequirement requirement)
         {
-            if (context.User.Identity is {IsAuthenticated: false})
+            if (context.User.Identity is null || !context.User.Identity.IsAuthenticated)
             {
                 context.Fail();
                 return Task.CompletedTask;

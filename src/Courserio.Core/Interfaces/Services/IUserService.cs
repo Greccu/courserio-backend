@@ -8,6 +8,7 @@ namespace Courserio.Core.Interfaces.Services
 {
     public interface IUserService
     {
+        Task<UserDto> GetInfoByUsernameAsync(string username);
         Task<UserProfileDto> GetByIdAsync(int id);
         Task RegisterAsync(UserRegisterDto userRegisterDto);
         Task<List<UserDto>> ListAsync(UserFilter userFilter);

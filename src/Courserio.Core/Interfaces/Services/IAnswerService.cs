@@ -4,5 +4,5 @@ namespace Courserio.Core.Interfaces.Services;
 
 public interface IAnswerService
 {
-    Task CreateAsync(AnswerCreateDto questionDto);
+    Task<AnswerDto> CreateAsync(AnswerCreateDto questionDto);
 }

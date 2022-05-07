@@ -1,5 +1,6 @@
 ﻿using Courserio.Core.DTOs.Course;
 using Courserio.Core.Filters;
+using Courserio.Core.Helpers;
 using Courserio.Core.Interfaces;
 using Courserio.Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -48,12 +49,23 @@ namespace Courserio.Api.Controllers
             return Ok(ret);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        [Authorize]
+        [HttpGet("recommended")]
+        public async Task<IActionResult> GetRecommendedAsync()
         {
-            var ret = await _courseService.GetByIdAsync(id);
+            var ret = await _courseService.GetRecommendedAsync(User.GetUsername());
             return Ok(ret);
         }
+
+        [HttpGet("{id}")]
+        [Authorize]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            var ret = await _courseService.GetByIdAsync(id, User.GetUsername());
+            return Ok(ret);
+        }
+
+        
 
         /// <summary>
         /// Create a new course.
@@ -63,111 +75,17 @@ namespace Courserio.Api.Controllers
         /// </remarks>
         //[Authorize(Roles = "Creator")]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CourseCreateDto course)
+        public async Task<IActionResult> PostAsync([FromBody] CourseCreateDto course)
         {
             await _courseService.CreateAsync(course);
             return Ok();
         }
 
-
-
-        ///// <summary>
-        ///// See a course.
-        ///// </summary>
-        ///// <remarks>
-        ///// You need to be registered to access this resource.
-        ///// </remarks>
-        //[HttpGet("{id}")]
-        //public IActionResult Get(int id)
-        //{
-        //    var ret = _courseService.Get(id);
-        //    if (ret == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(ret);
-        //}
-
-
-
-
-        ///// <summary>
-        ///// Update a course.
-        ///// </summary>
-        ///// <remarks>
-        ///// You need to be a creator to access this resource.
-        ///// </remarks>
-        //[HttpPut("{id}")]
-        //[Authorize(Roles = "Creator")]
-        //public IActionResult Put(int id, [FromBody] CoursePost course)
-        //{
-
-        //    CoursePost ret = _courseService.UpdateCourse(id, course, CurrentUserId());
-        //    if(ret == null)
-        //    {
-        //        return Forbid();
-        //    }
-        //    return Ok();
-        //}
-
-        ///// <summary>
-        ///// Delete a course.
-        ///// </summary>
-        ///// <remarks>
-        ///// You need to be a creator or a moderator to access this resource.
-        ///// </remarks>
-        //[Authorize(Roles = "Creator,Moderator")]
-        //[HttpDelete("{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    string userId = User.IsInRole("Moderator") ? "Moderator" : CurrentUserId();
-        //    var ret = _courseService.DeleteCourse(id,userId);
-        //    if(ret == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(ret);
-        //}
-
-        //[NonAction]
-        //private string CurrentUserId()
-        //{
-        //    return User.FindFirst(ClaimTypes.NameIdentifier).Value;
-        //}
-
-
-        ///// <summary>
-        ///// Join a course to have access to it's resources.
-        ///// </summary>
-        ///// <remarks>
-        ///// You need to be registered to access this resource.
-        ///// </remarks>
-        //[HttpPost("{id}")]
-        //public IActionResult Join(int id)
-        //{
-        //    var ret = _courseService.AssignUserToCourse(id, CurrentUserId());
-        //    if (ret == null)
-        //    {
-        //        return BadRequest("You have already joined this course or the course does not exists");
-        //    }
-        //    return Ok(ret);
-        //}
-
-        ///// <summary>
-        ///// Leave a course.
-        ///// </summary>
-        ///// <remarks>
-        ///// You need to be registered to access this resource.
-        ///// </remarks>
-        //[HttpPost("{id}")]
-        //public IActionResult Leave(int id)
-        //{
-        //    var ret = _courseService.RemoveUserFromCourse(id, CurrentUserId());
-        //    if (ret == null)
-        //    {
-        //        return BadRequest("You are not part of this course or the course does not exists");
-        //    }
-        //    return Ok();
-        //}
+        [HttpGet("update-ratings")]
+        public async Task<IActionResult> UpdateRatingsAsync()
+        {
+            await _courseService.UpdateRatingsAsync();
+            return Ok();
+        }
     }
 }

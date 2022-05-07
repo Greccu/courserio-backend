@@ -2,10 +2,8 @@
 
 namespace Courserio.Core.Models
 {
-    public class Tag
+    public class Tag : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         [Required, MinLength(2), MaxLength(30)]
         public string Name { get; set; }
 

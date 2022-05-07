@@ -2,13 +2,8 @@
 
 namespace Courserio.Core.Models
 {
-    public class Answer
+    public class Answer : BaseEntity 
     {
-        //
-        [Key]
-        public int Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        
         [Required, MinLength(2)]
         public string Content { get; set; }
         public bool Anonymous { get; set; }

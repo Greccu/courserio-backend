@@ -18,6 +18,6 @@ namespace Courserio.Core.DTOs.User
 
         public virtual CourseFeaturedDto FeaturedCourse { get; set; }
         public virtual ICollection<CourseListDto> CreatedCourses { get; set; }
-        public virtual ICollection<CourseListDto> Courses { get; set; }
+        public virtual ICollection<CourseListDto> RatedCourses { get; set; }
     }
 }
