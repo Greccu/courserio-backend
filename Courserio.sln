@@ -5,15 +5,17 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{248D1A88-D787-471B-9631-686CE75ECB89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Courserio.Api", "src\Courserio.Api\Courserio.Api.csproj", "{E1DF6CB9-BCD2-4134-9F71-37F39BFDAC8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Courserio.Api", "src\Courserio.Api\Courserio.Api.csproj", "{E1DF6CB9-BCD2-4134-9F71-37F39BFDAC8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Courserio.Core", "src\Courserio.Core\Courserio.Core.csproj", "{CBEBEB8F-086C-469F-95DB-1B3C2844D4F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Courserio.Core", "src\Courserio.Core\Courserio.Core.csproj", "{CBEBEB8F-086C-469F-95DB-1B3C2844D4F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Courserio.Infrastructure", "src\Courserio.Infrastructure\Courserio.Infrastructure.csproj", "{B97440E3-14FE-45B9-A983-2883EF0C44E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Courserio.Infrastructure", "src\Courserio.Infrastructure\Courserio.Infrastructure.csproj", "{B97440E3-14FE-45B9-A983-2883EF0C44E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Courserio.Extensions", "src\Courserio.Extensions\Courserio.Extensions.csproj", "{736515C3-B46D-4B99-889B-2C9CDCA5BE05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Courserio.Extensions", "src\Courserio.Extensions\Courserio.Extensions.csproj", "{736515C3-B46D-4B99-889B-2C9CDCA5BE05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Courserio.Keycloak", "src\Courserio.Keycloak\Courserio.Keycloak.csproj", "{4DF2518D-DEFD-4CB9-B199-B8AFD0D88504}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Courserio.Keycloak", "src\Courserio.Keycloak\Courserio.Keycloak.csproj", "{4DF2518D-DEFD-4CB9-B199-B8AFD0D88504}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MLModel1_WebApi1", "src\MLModel1_WebApi1\MLModel1_WebApi1.csproj", "{FBE8621E-61EB-48BD-B637-1551F6204C00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{4DF2518D-DEFD-4CB9-B199-B8AFD0D88504}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DF2518D-DEFD-4CB9-B199-B8AFD0D88504}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4DF2518D-DEFD-4CB9-B199-B8AFD0D88504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBE8621E-61EB-48BD-B637-1551F6204C00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBE8621E-61EB-48BD-B637-1551F6204C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBE8621E-61EB-48BD-B637-1551F6204C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBE8621E-61EB-48BD-B637-1551F6204C00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -17,5 +17,6 @@ namespace Courserio.Core.DTOs.Course
         [Required]
         public int CreatorId { get; set; }
         public List<ChapterCreateDto> Chapters { get; set; }
+        public List<int> Tags { get; set; }
     }
 }

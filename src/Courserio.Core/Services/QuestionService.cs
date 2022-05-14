@@ -26,6 +26,7 @@ namespace Courserio.Core.Services
             var question = _mapper.Map<Question>(questionDto);
             question.CreatedAt = DateTime.Now;
             await _questionRepository.AddAsync(question);
+            question.User = new User();
             return _mapper.Map<QuestionDto>(question);
         }
 

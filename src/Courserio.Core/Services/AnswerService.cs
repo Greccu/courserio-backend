@@ -23,6 +23,7 @@ namespace Courserio.Core.Services
             var answer = _mapper.Map<Answer>(answerDto);
             answer.CreatedAt = DateTime.Now;
             await _answerRepository.AddAsync(answer);
+            answer.User = new User();
             return _mapper.Map<AnswerDto>(answer);
         }
     }

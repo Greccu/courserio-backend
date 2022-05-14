@@ -1,4 +1,5 @@
 ﻿using Courserio.Core.DTOs.Chapter;
+using Courserio.Core.DTOs.Tags;
 using Courserio.Core.DTOs.User;
 
 namespace Courserio.Core.DTOs.Course
@@ -18,6 +19,7 @@ namespace Courserio.Core.DTOs.Course
 
         public UserDto Creator { get; set; }
 
-        public IEnumerable<ChapterListDto> Chapters { get; set; }
+        public ICollection<ChapterListDto> Chapters { get; set; }
+        public ICollection<TagDto> Tag { get; set; }
     }
 }

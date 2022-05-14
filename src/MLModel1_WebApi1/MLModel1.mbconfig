@@ -1,0 +1,82 @@
+﻿{
+  "TrainingTime": 10,
+  "Scenario": "Recommendation",
+  "DataSource": {
+    "Type": "TabularFile",
+    "Version": 1,
+    "FilePath": "C:\\Users\\Softbinator\\source\\repos\\Facultate\\Courserio\\data\\train-data.csv",
+    "Delimiter": ",",
+    "DecimalMarker": ".",
+    "HasHeader": true,
+    "ColumnProperties": [
+      {
+        "ColumnName": "userId",
+        "ColumnPurpose": "User",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 1
+      },
+      {
+        "ColumnName": "courseId",
+        "ColumnPurpose": "Item",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 1
+      },
+      {
+        "ColumnName": "user-rating",
+        "ColumnPurpose": "Label",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 1
+      },
+      {
+        "ColumnName": "rating",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 1
+      },
+      {
+        "ColumnName": "rating-count",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 1
+      }
+    ]
+  },
+  "Environment": {
+    "Type": "LocalCPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 0,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -10.0317,
+        "RuntimeInSeconds": 2.5
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -9.5591,
+        "RuntimeInSeconds": 1.6
+      }
+    ],
+    "Pipeline": "[{\"EstimatorType\":\"MapValueToKey\",\"Inputs\":[\"userId\"],\"Outputs\":[\"userId\"]},{\"EstimatorType\":\"MapValueToKey\",\"Inputs\":[\"courseId\"],\"Outputs\":[\"courseId\"]},{\"LabelColumnName\":\"user-rating\",\"MatrixColumnIndexColumnName\":\"userId\",\"MatrixRowIndexColumnName\":\"courseId\",\"ApproximationRank\":\"16\",\"LearningRate\":\"0.1\",\"NumberOfIterations\":\"40\",\"EstimatorType\":\"MatrixFactorization\",\"Inputs\":[\"Features\"],\"Outputs\":[\"Score\"]}]",
+    "MetricName": "RSquared"
+  },
+  "Type": "TrainingConfig",
+  "Version": 1
+}

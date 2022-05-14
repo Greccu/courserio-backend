@@ -23,5 +23,12 @@ namespace Courserio.Api.Controllers
             await _ratingService.CreateOrUpdateAsync(ratingDto);
             return Ok();
         }
+        
+        [HttpGet("update-ratings/{id}")]
+        public async Task<IActionResult> UpdateRatingsAsync(int id)
+        {
+            await _ratingService.UpdateRatingForOneAsync(id);
+            return Ok();
+        }
     }
 }

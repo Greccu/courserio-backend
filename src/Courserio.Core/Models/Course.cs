@@ -12,7 +12,7 @@ namespace Courserio.Core.Models
         public string Title { get; set; }
         public string Description { get; set; }
         public int CreatorId { get; set; }
-        public decimal AverageRating { get; set; }
+        public float AverageRating { get; set; }
         public int RatingsCount { get; set; }
 
         // Navigation Properties

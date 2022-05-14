@@ -35,7 +35,7 @@ namespace Courserio.Api.Controllers
         public async Task<IActionResult> CreateAsync([FromBody]QuestionCreateDto questionDto)
         {
             var res = await _questionService.CreateAsync(questionDto);
-            return Ok();
+            return Ok(res);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using AutoMapper;
-using AutoMapper.Internal;
+﻿ using AutoMapper;
 using Courserio.Core.Constants;
 using Courserio.Core.DTOs;
 using Courserio.Core.DTOs.Course;
@@ -18,13 +16,15 @@ namespace Courserio.Core.Services
     {
         private readonly IGenericRepository<Course> _courseRepository;
         private readonly IGenericRepository<User> _userRepository;
+        private readonly IGenericRepository<Tag> _tagRepository;
         private readonly IMapper _mapper;
 
-        public CourseService(IGenericRepository<Course> courseRepository, IMapper mapper, IGenericRepository<User> userRepository)
+        public CourseService(IGenericRepository<Course> courseRepository, IMapper mapper, IGenericRepository<User> userRepository, IGenericRepository<Tag> tagRepository)
         {
             _courseRepository = courseRepository;
             _mapper = mapper;
             _userRepository = userRepository;
+            _tagRepository = tagRepository;
         }
 
         public async Task<List<CourseListDto>> GetHomeAsync()
@@ -64,7 +64,7 @@ namespace Courserio.Core.Services
                 switch (courseFilter.OrderBy.ToLower())
                 {
                     case "new":
-                        query = query.OrderBy(x => x.CreatedAt);
+                        query = query.OrderByDescending(x => x.CreatedAt);
                         break;
                     case "rating":
                         query = query.OrderByDescending(x => x.AverageRating);
@@ -85,6 +85,7 @@ namespace Courserio.Core.Services
             var course = _mapper.Map<Course>(courseDto);
             course.CoverImage ??= CourseConstants.DefaultCourseBackground;
             course.MiniatureImage ??= CourseConstants.DefaultCourseBackground;
+            course.Tags = await _tagRepository.AsQueryable().Where(x => courseDto.Tags.Contains(x.Id)).ToListAsync();
             await _courseRepository.AddAsync(course);
         }
 
@@ -97,6 +98,7 @@ namespace Courserio.Core.Services
                 .Include(x => x.Creator)
                 .Include(x => x.Chapters)
                 .Include(x => x.Ratings.Where(y => user != null && y.UserId == user.Id))
+                .Include(x => x.Tags)
                 .FirstOrDefaultAsync();
             if (course == null)
             {
@@ -120,11 +122,13 @@ namespace Courserio.Core.Services
                 var ratings = course.Ratings.Count;
                 if (ratings == 0) continue;
                 var average = (decimal)course.Ratings.Sum(x => x.Value) / ratings;
-                course.AverageRating = Math.Round(average,2);
+                course.AverageRating = (float)Math.Round(average,2);
                 course.RatingsCount = ratings;
             }
             await _courseRepository.UpdateRangeAsync(courses);
         }
+
+
 
 
 

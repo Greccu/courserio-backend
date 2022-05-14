@@ -3,6 +3,7 @@ using Courserio.Core.AutoMapper;
 using Courserio.Core.Interfaces;
 using Courserio.Core.Interfaces.Repositories;
 using Courserio.Core.Interfaces.Services;
+using Courserio.Core.MachineLearningModel;
 using Courserio.Core.Services;
 using Courserio.Infrastructure.Context;
 using Courserio.Infrastructure.Repositories;
@@ -45,9 +46,11 @@ namespace Courserio.Api
             services.AddScoped<ICourseService, CourseService>();
             services.AddScoped<IChapterService, ChapterService>();
             services.AddScoped<IQuestionService, QuestionService>();
-            //services.AddScoped<ITagService, TagService>();
             services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<IRoleApplicationService, RoleApplicationService>();
+            services.AddScoped<ITagService, TagService>();
+            //
+            services.AddSingleton<IModelService, ModelService>();
         }
         
         public static void AddDatabaseContext(this IServiceCollection services, IConfiguration configuration)

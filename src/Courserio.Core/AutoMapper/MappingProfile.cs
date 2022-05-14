@@ -6,6 +6,7 @@ using Courserio.Core.DTOs.Chapter;
 using Courserio.Core.DTOs.Course;
 using Courserio.Core.DTOs.Question;
 using Courserio.Core.DTOs.Rating;
+using Courserio.Core.DTOs.Tags;
 using Courserio.Core.DTOs.User;
 using Courserio.Core.Helpers;
 using Courserio.Core.Models;
@@ -40,10 +41,8 @@ namespace Courserio.Core.AutoMapper
             CreateMap<Course, CoursePageDto>()
                 .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
 
-                .AfterMap((_, dest) =>
-            {
-                dest.Chapters = dest.Chapters.OrderBy(x => x.Title);
-            }).ReverseMap();
+                 
+                .ReverseMap();
             CreateMap<Course, CourseCreateDto>().ReverseMap();
             CreateMap<Course, CourseFeaturedDto>()
                 .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
@@ -75,6 +74,9 @@ namespace Courserio.Core.AutoMapper
                 .ReverseMap();
             CreateMap<Rating, RatingCreateDto>().ReverseMap();
 
+            CreateMap<Tag, TagDto>();
+            CreateMap<string, Tag>().ConvertUsing(s => new Tag { Name = s });
+            
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             CreateMap<JsonPatchDocument<User>, JsonPatchDocument<UserProfileDto>>().ReverseMap();
