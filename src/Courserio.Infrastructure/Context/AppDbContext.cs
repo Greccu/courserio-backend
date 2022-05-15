@@ -23,6 +23,8 @@ namespace Courserio.Infrastructure.Context
         public DbSet<RoleApplication> RoleApplications { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<MlModel> MlModels { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

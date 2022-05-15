@@ -14,6 +14,10 @@ using Courserio.KeyCloak.AuthorizationHandler;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Hangfire;
+using Hangfire.MySql;
+
+//using Hangfire.MySql;
 
 namespace Courserio.Api
 {
@@ -50,7 +54,7 @@ namespace Courserio.Api
             services.AddScoped<IRoleApplicationService, RoleApplicationService>();
             services.AddScoped<ITagService, TagService>();
             //
-            services.AddSingleton<IModelService, ModelService>();
+            services.AddScoped<IModelService, ModelService>();
         }
         
         public static void AddDatabaseContext(this IServiceCollection services, IConfiguration configuration)
@@ -129,7 +133,7 @@ namespace Courserio.Api
             services.AddSingleton(mapper);
         }
 
-        public static void AddCors(this IServiceCollection services)
+        public static void AddCorsPolicies(this IServiceCollection services)
         {
             services.AddCors(options =>
             {
@@ -142,6 +146,20 @@ namespace Courserio.Api
                        .AllowAnyHeader();
                     });
             });
+        }
+
+        public static void AddHangfire(this IServiceCollection services, IConfiguration configuration)
+        {
+            
+            services.AddHangfire(options =>
+                {
+                    options.UseStorage(new MySqlStorage(configuration.GetConnectionString("LocalDB"), new MySqlStorageOptions
+                    {
+                        TablesPrefix = "zHangfire."
+                    }));
+                }
+            );
+            services.AddHangfireServer();
         }
     }
 }

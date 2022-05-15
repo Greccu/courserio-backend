@@ -1,61 +1,95 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using Courserio.Api;
+using Courserio.Core.Extensions.Hangfire;
+using Courserio.Core.Middlewares.ExceptionMiddleware;
+using Courserio.Infrastructure.Seeders;
+using Hangfire;
 using NLog.Web;
-using System;
 
-namespace Courserio.Api
-{
-    public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+var configurationBuilder = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .AddUserSecrets<Program>();
+
+builder.WebHost
+    .ConfigureLogging(logging =>
     {
-        public static void Main(string[] args)
-        {
-            
-            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
-            try
-            {
-                logger.Info("Application starting...");
-                CreateHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                logger.Fatal(ex, "The application failed :( ");
-                throw;
-            }
-            finally
-            {
-                NLog.LogManager.Shutdown();
-            }
-        }
+        logging.ClearProviders();
+    })
+    .UseNLog();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-           Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.ConfigureAppConfiguration((context, config) =>
-                    {
-                        config.AddEnvironmentVariables();
-                        if (context.HostingEnvironment.IsProduction())
-                        {
-                            //IConfigurationRoot partialConfig = config.Build(); // build partial config
-                            //string keyVaultName = partialConfig["KeyVaultName"]; // read value from configuration
-                            //var secretClient = new SecretClient(
-                            //    new Uri($"https://{keyVaultName}.vault.azure.net/"),
-                            //    new DefaultAzureCredential());
-                            //config.AddAzureKeyVault(secretClient, new KeyVaultSecretManager()); // add an extra configuration source
-                            //                                                                    // The framework calls config.Build() AGAIN to build the final IConfigurationRoot
-                            webBuilder.UseKestrel(configure => { configure.Listen(System.Net.IPAddress.Any, 5000); });
-                        }
-                    });
-                    webBuilder.UseStartup<Startup>()
-                    .ConfigureLogging(logging =>
-                    {
-                        logging.ClearProviders();
-                    })
-                    .UseNLog();
-                    
-                });
 
-    }
+if (!builder.Environment.IsDevelopment())
+{
+    builder.WebHost.UseKestrel(configure => { configure.Listen(System.Net.IPAddress.Any, 5000); });
+    configurationBuilder.AddEnvironmentVariables();
 }
+
+
+IConfiguration configuration = configurationBuilder.Build();
+
+
+// Add services to the container.
+
+builder.Services.AddCorsPolicies();
+builder.Services.AddMapper();
+builder.Services.AddDatabaseContext(configuration);
+builder.Services.AddHangfire(configuration);
+
+//// KEYCLOAK
+builder.Services.AddKeycloak(configuration);
+
+builder.Services.AddSwagger();
+builder.Services.AddServices();
+builder.Services.AddTransient<InitialSeeder>();
+builder.Services.AddMapper();
+builder.Services.AddControllers();
+
+
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+{
+    app.UseStaticFiles();
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger(c => { });
+    app.UseSwaggerUI(
+        c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Courserio.Api v1");
+            c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
+            c.InjectStylesheet("/Content/SwaggerDark.css");
+            c.OAuthClientId("courserio");
+            c.OAuthAppName("Courserio");
+            c.OAuthScopeSeparator(" ");
+        });
+    app.UseHangfireDashboard("/hangfire", new DashboardOptions { Authorization = new[] { new HangfireAuth() } });
+}
+
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors("allowAll");
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.UseEndpoints(endpoints =>
+{
+    if (app.Environment.IsDevelopment())
+    {
+        endpoints.MapControllers();
+    }
+    else
+    {
+        endpoints.MapControllers();
+    }
+});
+
+app.Run();

@@ -31,5 +31,6 @@ namespace Courserio.Core.Models
         public virtual ICollection<Answer> Answers { get; set; }
         public virtual ICollection<RoleApplication> RoleApplications { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

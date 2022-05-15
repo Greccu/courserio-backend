@@ -21,7 +21,6 @@ namespace Courserio.Api.Controllers
         {
             return Ok("Auth works!!");
         }
-        
-        
+
     }
 }

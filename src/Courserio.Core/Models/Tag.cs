@@ -9,5 +9,6 @@ namespace Courserio.Core.Models
 
         // Navigation Properties
         public virtual ICollection<Course> Courses { get; set; }
+        public virtual ICollection<User> Users { get; set; }
     }
 }

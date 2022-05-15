@@ -5,7 +5,9 @@ using Courserio.Core.DTOs.Course;
 using Courserio.Core.Filters;
 using Courserio.Core.Interfaces.Repositories;
 using Courserio.Core.Interfaces.Services;
-using Courserio.Core.Middlewares.ExceptionMiddleware.CustomExceptions;
+ using Courserio.Core.MachineLearningModel;
+ using Courserio.Core.MachineLearningModel.Entities;
+ using Courserio.Core.Middlewares.ExceptionMiddleware.CustomExceptions;
 using Courserio.Core.Models;
 using Courserio.Pagination;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +20,19 @@ namespace Courserio.Core.Services
         private readonly IGenericRepository<User> _userRepository;
         private readonly IGenericRepository<Tag> _tagRepository;
         private readonly IMapper _mapper;
+        private readonly IModelService _modelService;
 
-        public CourseService(IGenericRepository<Course> courseRepository, IMapper mapper, IGenericRepository<User> userRepository, IGenericRepository<Tag> tagRepository)
+        public CourseService(IGenericRepository<Course> courseRepository, 
+            IMapper mapper, 
+            IGenericRepository<User> userRepository, 
+            IGenericRepository<Tag> tagRepository, 
+            IModelService modelService)
         {
             _courseRepository = courseRepository;
             _mapper = mapper;
             _userRepository = userRepository;
             _tagRepository = tagRepository;
+            _modelService = modelService;
         }
 
         public async Task<List<CourseListDto>> GetHomeAsync()
@@ -38,16 +46,7 @@ namespace Courserio.Core.Services
                 .Select(_mapper.Map<CourseListDto>).ToList();
         }
 
-        public async Task<List<CourseListDto>> GetRecommendedAsync(string username)
-        {
-            return (await _courseRepository
-                .AsQueryable()
-                .OrderByDescending(x => x.AverageRating)
-                .Take(4)
-                .Include(x => x.Creator)
-                .ToListAsync())
-                .Select(_mapper.Map<CourseListDto>).ToList();
-        }
+
 
         public async Task<PagedResult<CourseListDto>> ListAsync(CourseFilter courseFilter)
         {
@@ -128,7 +127,66 @@ namespace Courserio.Core.Services
             await _courseRepository.UpdateRangeAsync(courses);
         }
 
+        public async Task<List<CourseListDto>> GetRecommendedAsync(string username)
+        {
+            var user = await _userRepository
+                .AsQueryable()
+                .Where(x => x.Username == username)
+                .Include(x => x.Ratings)
+                .Include(x => x.Tags)
+                .FirstOrDefaultAsync();
 
+            if (user is null)
+            {
+                throw new CustomNotFoundException("User not found!");
+            }
+            var userRatings = user.Ratings.Select(x => x.CourseId).ToList();
+            var userTags = user.Tags.Select(x => x.Id).ToList();
+            if (userRatings.Count == 0 || userTags.Count == 0)
+            {
+                throw new CustomBadRequestException("You need to rate at least one course or follow at least one tag to see recommended courses!");
+            }
+            // base query for recommended courses
+            var baseQuery = _courseRepository.AsQueryable()
+                .Include(course => course.Ratings)
+                .Include(course => course.Tags)
+                .Where(course => !userRatings.Contains(course.Id)) // exclude courses that user already rated
+                .Where(course => course.CreatorId != user.Id); // exclude courses that user created
+
+            // get top rated courses
+            var topRatedCourses = await baseQuery
+                .OrderByDescending(course => course.AverageRating)
+                .Take(5)
+                .ToListAsync();
+
+            // get most popular courses
+            var popularCourses = await baseQuery
+                .OrderByDescending(course => course.RatingsCount)
+                .Take(5)
+                .ToListAsync();
+
+            // get courses with similar tags
+            var similarCourses = await baseQuery
+                .OrderByDescending(course => course.Tags.Count(tag => userTags.Contains(tag.Id)))
+                .Take(10)
+                .ToListAsync();
+
+            var courses = topRatedCourses
+                .Concat(popularCourses)
+                .Concat(similarCourses)
+                .DistinctBy(course => course.Id)
+                .OrderByDescending(course => _modelService.Predict(new ModelInput
+                {
+                    CourseId = course.Id,
+                    UserId = user.Id
+                }).Score)
+                .Take(4)
+                .ToList();
+
+            return courses.Select(_mapper.Map<CourseListDto>).ToList();
+        }
+
+        
 
 
 
