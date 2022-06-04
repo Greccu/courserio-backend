@@ -1,17 +1,15 @@
 ﻿using Courserio.Core.MachineLearningModel;
 using Hangfire;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Courserio.Api
 {
     public class HangfireSetup
     {
-        public void Setup()
+        public static void AddJobs()
         {
-            //RecurringJob(() => { });
-            //RecurringJob.AddOrUpdate("train-recommendation-engine",
-            //    (IModelService modelService) => { modelService.TrainLastDayAsync();  }, Cron.Daily);
-            
-            RecurringJob.AddOrUpdate("train-recommendation-engine", (IModelService modelService) => modelService.TrainLastDayAsync(), Cron.Daily);
+            BackgroundJob.Enqueue<IModelService>((modelService) => modelService.LoadModelAsync());
+            RecurringJob.AddOrUpdate<IModelService>("train-recommendation-engine", (modelService) => modelService.TrainLastDayAsync(), Cron.Daily);
         }
     }
 }

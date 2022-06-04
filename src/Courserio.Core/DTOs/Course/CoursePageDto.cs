@@ -20,6 +20,6 @@ namespace Courserio.Core.DTOs.Course
         public UserDto Creator { get; set; }
 
         public ICollection<ChapterListDto> Chapters { get; set; }
-        public ICollection<TagDto> Tag { get; set; }
+        public ICollection<TagCourseDto> Tags { get; set; }
     }
 }

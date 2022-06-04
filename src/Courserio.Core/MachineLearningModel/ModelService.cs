@@ -68,6 +68,7 @@ namespace Courserio.Core.MachineLearningModel
                 Type = MlModelTypeEnum.CourseRecommendation,
                 Content = bytes
             });
+            await LoadModelAsync();
         }
 
         public ModelOutput Predict(ModelInput input)

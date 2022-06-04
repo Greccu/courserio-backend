@@ -11,5 +11,7 @@ namespace Courserio.Core.Interfaces.Services
     {
         Task<List<TagDto>> ListAsync();
         Task CreateManyAsync(List<string> tags);
+        Task FollowAsync(int id, string username);
+        Task UnfollowAsync(int id, string username);
     }
 }

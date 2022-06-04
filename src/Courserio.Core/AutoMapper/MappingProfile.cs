@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Courserio.Core.Constants;
+using Courserio.Core.DTOs;
 using Courserio.Core.DTOs.Answer;
 using Courserio.Core.DTOs.Auth;
 using Courserio.Core.DTOs.Chapter;
@@ -75,6 +76,7 @@ namespace Courserio.Core.AutoMapper
             CreateMap<Rating, RatingCreateDto>().ReverseMap();
 
             CreateMap<Tag, TagDto>();
+            CreateMap<Tag, TagCourseDto>();
             CreateMap<string, Tag>().ConvertUsing(s => new Tag { Name = s });
             
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

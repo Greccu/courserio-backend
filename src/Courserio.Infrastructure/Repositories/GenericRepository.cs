@@ -59,13 +59,6 @@ namespace Courserio.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        //public async Task<T> AddWithIdentityAsync(T entity)
-        //{
-        //    await _dbContext.Set<T>().AddAsync(entity);
-        //    _dbContext.SaveChangesWithIdentityInsert<T>();
-        //    return entity;
-        //}
-
         public async Task<T> PatchAsync(int id, JsonPatchDocument<T> patchDocument)
         {
             var t = await GetByIdAsync(id);
@@ -76,7 +69,7 @@ namespace Courserio.Infrastructure.Repositories
 
         public async Task UpdateAsync(T entity)
         {
-            //_dbContext.Entry(entity).State = EntityState.Modified;
+            _dbContext.Entry(entity).State = EntityState.Modified;
             _dbContext.Set<T>().Update(entity);
             await _dbContext.SaveChangesAsync();
         }
@@ -86,29 +79,9 @@ namespace Courserio.Infrastructure.Repositories
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
-
-        //public async Task<int> CountAsync(ISpecification<T> spec)
-        //{
-        //    var specificationResult = ApplySpecification(spec);
-        //    return await specificationResult.CountAsync();
-        //}
-
-        //public async Task<T> FirstAsync(ISpecification<T> spec)
-        //{
-        //    var specificationResult = ApplySpecification(spec);
-        //    return await specificationResult.FirstAsync();
-        //}
-
-        //public async Task<T> FirstOrDefaultAsync(ISpecification<T> spec)
-        //{
-        //    var specificationResult = ApplySpecification(spec);
-        //    return await specificationResult.FirstOrDefaultAsync();
-        //}
-
-        //private IQueryable<T> ApplySpecification(ISpecification<T> spec)
-        //{
-        //    var evaluator = new SpecificationEvaluator();
-        //    return evaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
-        //}
+        public async Task SaveChangesAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

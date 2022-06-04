@@ -50,7 +50,7 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseStaticFiles();
     app.UseDeveloperExceptionPage();
@@ -91,5 +91,7 @@ app.UseEndpoints(endpoints =>
         endpoints.MapControllers();
     }
 });
+
+HangfireSetup.AddJobs();
 
 app.Run();

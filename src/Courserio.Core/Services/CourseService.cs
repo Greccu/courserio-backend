@@ -90,7 +90,10 @@ namespace Courserio.Core.Services
 
         public async Task<CoursePageDto> GetByIdAsync(int id, string username)
         {
-            var user = await _userRepository.AsQueryable().FirstOrDefaultAsync(x => x.Username == username);
+            var user = await _userRepository
+                .AsQueryable()
+                .Include(x => x.Tags)
+                .FirstOrDefaultAsync(x => x.Username == username);
             var course = await _courseRepository
                 .AsQueryable()
                 .Where(x => x.Id == id)
@@ -99,11 +102,13 @@ namespace Courserio.Core.Services
                 .Include(x => x.Ratings.Where(y => user != null && y.UserId == user.Id))
                 .Include(x => x.Tags)
                 .FirstOrDefaultAsync();
+            
             if (course == null)
             {
                 throw new CustomNotFoundException("Course not found!");
             }
             var result = _mapper.Map<CoursePageDto>(course);
+            result.Tags.ToList().ForEach(x => x.IsFollowed = user != null && user.Tags.Any(t => t.Id == x.Id));
             if (user != null) result.UserRating = course.Ratings.FirstOrDefault(x => x.UserId == user.Id)?.Value ?? 0;
             return result;
         }
@@ -142,12 +147,13 @@ namespace Courserio.Core.Services
             }
             var userRatings = user.Ratings.Select(x => x.CourseId).ToList();
             var userTags = user.Tags.Select(x => x.Id).ToList();
-            if (userRatings.Count == 0 || userTags.Count == 0)
+            if (userRatings.Count == 0 && userTags.Count == 0)
             {
                 throw new CustomBadRequestException("You need to rate at least one course or follow at least one tag to see recommended courses!");
             }
             // base query for recommended courses
             var baseQuery = _courseRepository.AsQueryable()
+                .Include(x => x.Creator)
                 .Include(course => course.Ratings)
                 .Include(course => course.Tags)
                 .Where(course => !userRatings.Contains(course.Id)) // exclude courses that user already rated
