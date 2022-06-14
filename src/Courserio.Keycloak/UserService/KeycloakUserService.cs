@@ -67,7 +67,7 @@ namespace Courserio.Keycloak.UserService
 
         public async Task<KeycloakResponse> RegisterAsync(RegisterDto registerDto)
         {
-            var url = _options.Host + "/auth/admin/realms/Courserio/users";
+            var url = _options.Host + "/admin/realms/Courserio/users";
             var body = new
             {
                 username = registerDto.Username,
@@ -117,7 +117,7 @@ namespace Courserio.Keycloak.UserService
 
         public async Task AddRoleToUserAsync(string userId, RoleDto role)
         {
-            var url = _options.Host + $"/auth/admin/realms/Courserio/users/{userId}/role-mappings/clients/{_options.Id}"; ;
+            var url = _options.Host + $"/admin/realms/Courserio/users/{userId}/role-mappings/clients/{_options.Id}"; ;
             var token = await AuthAsync();
             var content = $"[{JsonSerializer.Serialize(role)}]";
             var httpRequestMessage = new HttpRequestMessage
@@ -161,7 +161,7 @@ namespace Courserio.Keycloak.UserService
 
         private async Task<string> GetUserIdAsync(string username)
         {
-            var url = _options.Host + $"/auth/admin/realms/Courserio/users?username={username}"; ;
+            var url = _options.Host + $"/admin/realms/Courserio/users?username={username}"; ;
             var token = await AuthAsync();
             var httpRequestMessage = new HttpRequestMessage
             {

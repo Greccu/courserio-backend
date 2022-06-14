@@ -44,7 +44,9 @@ namespace Courserio.Core.AutoMapper
 
                  
                 .ReverseMap();
-            CreateMap<Course, CourseCreateDto>().ReverseMap();
+            CreateMap<Course, CourseCreateDto>()
+                .ReverseMap()
+                .ForMember(dest => dest.Tags, opt => opt.Ignore());
             CreateMap<Course, CourseFeaturedDto>()
                 .ForMember(dest => dest.CreatedAtRelative, opt => opt.MapFrom(src => src.CreatedAt.ToRelativeTime()))
                 .ReverseMap();

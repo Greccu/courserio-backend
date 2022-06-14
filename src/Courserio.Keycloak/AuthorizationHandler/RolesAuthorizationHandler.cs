@@ -36,7 +36,7 @@ namespace Courserio.KeyCloak.AuthorizationHandler
             {
                 // Client Roles
                 var value = context.User.FindFirst(x => x.Type == "resource_access")?.Value;
-                if (value != null)
+                if (value is not null)
                 {
                     var clientRolesAsString = JsonSerializer.Deserialize<Dictionary<string, object>>(value)?[ClientId].ToString();
                     if (clientRolesAsString != null)

@@ -9,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configurationBuilder = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
-    .AddUserSecrets<Program>();
+    .AddUserSecrets<Program>()
+    .AddEnvironmentVariables();
 
 builder.WebHost
     .ConfigureLogging(logging =>
@@ -50,7 +51,7 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging() || app.Environment.IsProduction())
 {
     app.UseStaticFiles();
     app.UseDeveloperExceptionPage();

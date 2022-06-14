@@ -46,15 +46,16 @@ namespace Courserio.Core.MachineLearningModel
                 .Where(x => x.CreatedAt.Date == DateTime.Now.Date.AddDays(-1))
                 .Include(x => x.Course)
                 .Select(x => new ModelInput
-            {
-                CourseId = x.CourseId,
-                UserId = x.UserId,
-                UserRating = x.Value,
-                Rating = x.Course.AverageRating, 
-                RatingCount = x.Course.RatingsCount
+                {
+                    CourseId = x.CourseId,
+                    UserId = x.UserId,
+                    UserRating = x.Value,
+                    Rating = x.Course.AverageRating, 
+                    RatingCount = x.Course.RatingsCount
                 }).ToListAsync();
 
-            
+            if (!input.Any())
+                return;
             var pipeline = BuildPipeline(MlContext);
             
             var trainData = MlContext.Data.LoadFromEnumerable(input);
@@ -83,7 +84,8 @@ namespace Courserio.Core.MachineLearningModel
         private static IEstimator<ITransformer> BuildPipeline(MLContext mlContext)
         {
             // Data process configuration with pipeline data transformations
-            var pipeline = mlContext.Transforms.Conversion.MapValueToKey(@"userId", @"userId")
+            var pipeline = 
+                mlContext.Transforms.Conversion.MapValueToKey(@"userId", @"userId")
                 .Append(mlContext.Transforms.Conversion.MapValueToKey(@"courseId", @"courseId"))
                 .Append(mlContext.Recommendation().Trainers.MatrixFactorization(labelColumnName: @"user-rating", matrixColumnIndexColumnName: @"userId", matrixRowIndexColumnName: @"courseId"));
 

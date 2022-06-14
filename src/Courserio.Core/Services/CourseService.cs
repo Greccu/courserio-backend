@@ -60,18 +60,13 @@ namespace Courserio.Core.Services
 
             if (!string.IsNullOrEmpty(courseFilter.OrderBy))
             {
-                switch (courseFilter.OrderBy.ToLower())
+                query = courseFilter.OrderBy.ToLower() switch
                 {
-                    case "new":
-                        query = query.OrderByDescending(x => x.CreatedAt);
-                        break;
-                    case "rating":
-                        query = query.OrderByDescending(x => x.AverageRating);
-                        break;
-                    case "popularity":
-                        query = query.OrderByDescending(x => x.RatingsCount);
-                        break;
-                }
+                    "new" => query.OrderByDescending(x => x.CreatedAt),
+                    "rating" => query.OrderByDescending(x => x.AverageRating),
+                    "popularity" => query.OrderByDescending(x => x.RatingsCount),
+                    _ => query
+                };
             }
             
             var result = await query.MapToPagedResultAsync(courseFilter, _mapper.Map<CourseListDto>);
@@ -142,15 +137,11 @@ namespace Courserio.Core.Services
                 .FirstOrDefaultAsync();
 
             if (user is null)
-            {
                 throw new CustomNotFoundException("User not found!");
-            }
             var userRatings = user.Ratings.Select(x => x.CourseId).ToList();
             var userTags = user.Tags.Select(x => x.Id).ToList();
-            if (userRatings.Count == 0 && userTags.Count == 0)
-            {
-                throw new CustomBadRequestException("You need to rate at least one course or follow at least one tag to see recommended courses!");
-            }
+            if (userRatings.Count == 0)
+                throw new CustomBadRequestException("You need to rate at least one course!");
             // base query for recommended courses
             var baseQuery = _courseRepository.AsQueryable()
                 .Include(x => x.Creator)
@@ -191,10 +182,5 @@ namespace Courserio.Core.Services
 
             return courses.Select(_mapper.Map<CourseListDto>).ToList();
         }
-
-        
-
-
-
     }
 }

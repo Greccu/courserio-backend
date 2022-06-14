@@ -36,7 +36,7 @@ namespace Courserio.Api.Controllers
         /// </remarks>
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync([FromQuery] CourseFilter courseFilter)
+        public async Task<IActionResult> ListAsync([FromQuery] CourseFilter courseFilter)
         {
             var ret = await _courseService.ListAsync(courseFilter);
             return Ok(ret);

@@ -1,0 +1,38 @@
+variables:
+  APP_NAME: "courserio_backend"
+  PROJECT_NAME: "Courserio.Api"
+  IN_PORT: 5000
+  OUT_PORT: 5000
+  ENVIRONMENT: Staging
+
+
+stages:
+  - build
+  - publish
+
+build:
+  stage: build
+  image : mcr.microsoft.com/dotnet/sdk:6.0
+  when: manual
+  allow_failure: false
+  artifacts:
+    paths:
+      - build/
+  script:
+    - dotnet publish -c Release -o ./build src/$PROJECT_NAME/$PROJECT_NAME.csproj
+
+publish dev:
+  stage: publish
+  # Use the official docker image.
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    - dev
+  script:
+    - chmod og= $DEV_SSH_KEY
+    - chmod -R 600 $DEV_SSH_KEY
+    - apk update && apk add openssh-client
+    - docker build -t $APP_NAME:$CI_PIPELINE_IID .
+    - docker save $APP_NAME:$CI_PIPELINE_IID | ssh -i $DEV_SSH_KEY -o StrictHostKeyChecking=no -C $DEV_SSH_USER@$DEV_SSH_IP docker load
+    - ssh -i $DEV_SSH_KEY -o StrictHostKeyChecking=no -C $DEV_SSH_USER@$DEV_SSH_IP "(docker ps -q --filter "name=$APP_NAME" | grep -q . && docker stop $APP_NAME && docker rm -fv $APP_NAME);(docker run -d -p $OUT_PORT:$IN_PORT --name $APP_NAME --env ASPNETCORE_ENVIRONMENT=$ENVIRONMENT --env KeyCloak:ClientSecret=$KEYCLOAK_CLIENT_SECRET --env ConnectionStrings:LocalDb=$DATABASE_CONNECTION_STRING $APP_NAME:$CI_PIPELINE_IID)"
